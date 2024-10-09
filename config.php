@@ -40,28 +40,21 @@ $directory = './uploads/';
 $daysOld = 30;
 $now = time();
 
-// Проверка наличия директории
 if (!is_dir($directory)) {
     die("NOT DIRECTORY: $directory");
 }
 
-// Открываем директорию
 if ($handle = opendir($directory)) {
-    // Проходим через каждый файл в папке
     while (false !== ($file = readdir($handle))) {
         $filePath = $directory . $file;
         
-        // Пропускаем текущую и родительскую директории ('.', '..')
         if ($file == '.' || $file == '..') {
             continue;
         }
 
-        // Проверяем, является ли это файлом
         if (is_file($filePath)) {
-            // Получаем время последнего изменения файла
             $fileModifiedTime = filemtime($filePath);
 
-            // Если файл старше заданного количества дней, удаляем его
             if (($now - $fileModifiedTime) > ($daysOld * 24 * 60 * 60)) {
                 unlink($filePath);
                 echo "Удален файл: $filePath\n";
